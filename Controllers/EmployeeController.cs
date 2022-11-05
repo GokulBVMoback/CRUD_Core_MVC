@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
 using CRUD_Core_MVC.Models;
+using System.Data.Common;
 
 namespace CRUD_Core_MVC.Controllers
 {
@@ -36,8 +37,6 @@ namespace CRUD_Core_MVC.Controllers
                         Age = Convert.ToInt32(sdr["Age"])
                     });
                 }
-                
-
             }
             catch (Exception ex)
             {
@@ -51,10 +50,9 @@ namespace CRUD_Core_MVC.Controllers
         }
 
         // GET: EmployeeController/Details/5
-        public ActionResult Details(int id)
+        public Employee Det(int id)
         {
-            List<Employee> employees = new List<Employee>();
-
+            Employee employee = new Employee();
             try
             {
                 SqlCommand cmd = con.CreateCommand();
@@ -62,16 +60,48 @@ namespace CRUD_Core_MVC.Controllers
                 cmd.CommandText = "SELECT * FROM tbl_Emp Where(ID=" + id + ");";
                 con.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
-                while (sdr.Read())
+                //while (sdr.Read())
+                //{
+                sdr.Read();
+                employee = (new Employee
+
                 {
-                    employees.Add(new Employee
-                    {
-                        Id = Convert.ToInt32(sdr["Id"]),
-                        Name = Convert.ToString(sdr["Name"]),
-                        Age = Convert.ToInt32(sdr["Age"])
-                    });
-                }
+                    Id = Convert.ToInt32(sdr.GetValue(0)),
+                    Name = Convert.ToString(sdr.GetValue(1)),
+                    Age = Convert.ToInt32(sdr.GetValue(2))
+                });
+                sdr.Close();
             }
+            finally
+            {
+                con.Close();
+            }
+            return employee;
+        }
+        public ActionResult Details(int id)
+        {
+            //Employee employee = new Employee();
+            try
+            {
+                //SqlCommand cmd = con.CreateCommand();
+                //cmd.CommandType = CommandType.Text;
+                //cmd.CommandText = "SELECT * FROM tbl_Emp Where(ID=" + id + ");";
+                //con.Open();
+                //SqlDataReader sdr = cmd.ExecuteReader();
+                ////while (sdr.Read())
+                ////{
+                //sdr.Read();
+                //employee = (new Employee
+
+                //{
+                //    Id = Convert.ToInt32(sdr.GetValue(0)),
+                //    Name = Convert.ToString(sdr.GetValue(1)),
+                //    Age = Convert.ToInt32(sdr.GetValue(2))
+                //});
+                //sdr.Close();
+                return View(Det(id));
+            }
+
             catch (Exception ex)
             {
                 return new JsonResult(ex.Message);
@@ -80,7 +110,7 @@ namespace CRUD_Core_MVC.Controllers
             {
                 con.Close();
             }
-            return View(employees);
+            //return View(employee);
         }
 
         // GET: EmployeeController/Create
@@ -116,7 +146,8 @@ namespace CRUD_Core_MVC.Controllers
         // GET: EmployeeController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            //var employee = Details(id);
+            return View(Det(id));
         }
 
         // POST: EmployeeController/Edit/5
@@ -146,7 +177,7 @@ namespace CRUD_Core_MVC.Controllers
         // GET: EmployeeController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(Det(id));
         }
 
         // POST: EmployeeController/Delete/5
