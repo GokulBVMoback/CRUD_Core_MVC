@@ -60,8 +60,6 @@ namespace CRUD_Core_MVC.Controllers
                 cmd.CommandText = "SELECT * FROM tbl_Emp Where(ID=" + id + ");";
                 con.Open();
                 SqlDataReader sdr = cmd.ExecuteReader();
-                //while (sdr.Read())
-                //{
                 sdr.Read();
                 employee = (new Employee
 
@@ -80,25 +78,8 @@ namespace CRUD_Core_MVC.Controllers
         }
         public ActionResult Details(int id)
         {
-            //Employee employee = new Employee();
             try
             {
-                //SqlCommand cmd = con.CreateCommand();
-                //cmd.CommandType = CommandType.Text;
-                //cmd.CommandText = "SELECT * FROM tbl_Emp Where(ID=" + id + ");";
-                //con.Open();
-                //SqlDataReader sdr = cmd.ExecuteReader();
-                ////while (sdr.Read())
-                ////{
-                //sdr.Read();
-                //employee = (new Employee
-
-                //{
-                //    Id = Convert.ToInt32(sdr.GetValue(0)),
-                //    Name = Convert.ToString(sdr.GetValue(1)),
-                //    Age = Convert.ToInt32(sdr.GetValue(2))
-                //});
-                //sdr.Close();
                 return View(Det(id));
             }
 
@@ -110,7 +91,6 @@ namespace CRUD_Core_MVC.Controllers
             {
                 con.Close();
             }
-            //return View(employee);
         }
 
         // GET: EmployeeController/Create
@@ -146,7 +126,6 @@ namespace CRUD_Core_MVC.Controllers
         // GET: EmployeeController/Edit/5
         public ActionResult Edit(int id)
         {
-            //var employee = Details(id);
             return View(Det(id));
         }
 
